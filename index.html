@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./three.js"></script>
+    <script src="./asteroids.js"></script>
+    <script src="./saturn.js"></script>
+    <script src="./sun.js"></script>
+    <script src="./skybox.js"></script>
+    <script src="./spaceStation.js"></script>
+    <script src="./OrbitControls.js"></script>
+    <script src="./GLTFLoader.js"></script>
+    <title>GameDevChathura</title>
+</head>
+<body>
+    <script>
+        
+        //creating a scene
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.shadowMap.enabled = true;
+        // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.body.appendChild( renderer.domElement );
+
+        //show axises
+        var axes = new THREE.AxesHelper(100);
+        // scene.add(axes);
+
+        //controls
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+        //add skybox with index
+        loadSkybox(2);
+
+        //add asteroids to the scene
+        otherFloatingObjects(size=15, after=500, 'assets/asteroid1.png');
+        otherFloatingObjects(size=20, after=500, 'assets/asteroid2.png');
+
+        //add saturn to the scene
+        saturnGlobe(Radius=10, 'assets/saturn2.jpg', 'assets/saturn2 - grayScale.jpg');
+        saturnRings(startAt=20, 'assets/ring2.png', 'assets/ring2 - grayScale.png', 0);
+        // saturnRings(startAt=20, 'assets/ring2.png', 'assets/ring2 - grayScale.png', 0.1); 
+        createMoons(endAt=50, 'assets/moon.jpg', 'assets/moon - grayScale.jpg'); // only titan moon will cast shadows
+
+        //space station
+        spaceStation();
+
+        //sun
+        sun(Radius=70, 'assets/sun.jpg');
+
+        camera.position.z = 50;
+        camera.position.x = 50;
+        camera.lookAt(0, 0, 0);
+
+        //window resize resposiveness
+        window.addEventListener('resize', function(){
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight)
+        })
+
+    </script>
+</body>
+</html>
